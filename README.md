@@ -5,6 +5,7 @@
 
 [![build](https://github.com/DoubleML/doubleml-for-r/workflows/build/badge.svg)](https://github.com/DoubleML/doubleml-for-r/actions?query=workflow%3Abuild)
 [![codecov](https://codecov.io/gh/DoubleML/doubleml-for-r/branch/master/graph/badge.svg?token=C5aiyo2MVL)](https://codecov.io/gh/DoubleML/doubleml-for-r)
+[![CodeFactor](https://www.codefactor.io/repository/github/doubleml/doubleml-for-r/badge)](https://www.codefactor.io/repository/github/doubleml/doubleml-for-r)
 [![CRAN
 Version](https://www.r-pkg.org/badges/version/DoubleML)](https://cran.r-project.org/package=DoubleML)
 
@@ -104,17 +105,20 @@ remotes::install_github("DoubleML/doubleml-for-r")
 
 If you use the DoubleML package a citation is highly appreciated:
 
-Bach, P., Chernozhukov, V., Kurz, M. S., and Spindler, M. (2020),
-DoubleML - Double Machine Learning in R. URL:
-<https://github.com/DoubleML/doubleml-for-r>, R-Package version 0.2.0.
+Bach, P., Chernozhukov, V., Kurz, M. S., and Spindler, M. (2021),
+DoubleML - An Object-Oriented Implementation of Double Machine Learning
+in R, arXiv:[2103.09603](https://arxiv.org/abs/2103.09603).
 
 Bibtex-entry:
 
-    @Manual{DoubleML2020,
-      title = {DoubleML - Double Machine Learning in R},
-      author = {Bach, P., Chernozhukov, V., Kurz, M. S., and Spindler, M.},
-      year = {2020},
-      note = {URL: \url{https://github.com/DoubleML/doubleml-for-r}, R-Package version 0.2.0}
+    @misc{DoubleML2020,
+          title={{DoubleML} -- {A}n Object-Oriented Implementation of Double Machine Learning in {R}}, 
+          author={P. Bach and V. Chernozhukov and M. S. Kurz and M. Spindler},
+          year={2021},
+          eprint={2103.09603},
+          archivePrefix={arXiv},
+          primaryClass={stat.ML},
+          note={arXiv:\href{https://arxiv.org/abs/2103.09603}{2103.09603} [stat.ML]}
     }
 
 ## References
