@@ -22,7 +22,7 @@ if (on_cran) {
     n_rep = c(1, 3),
     stringsAsFactors = FALSE)
 }
-test_cases["test_name"] = apply(test_cases, 1, paste, collapse = "_")
+test_cases[".test_name"] = apply(test_cases, 1, paste, collapse = "_")
 
 patrick::with_parameters_test_that("PLR with external sample provision:",
   .cases = test_cases, {
@@ -47,7 +47,7 @@ patrick::with_parameters_test_that("PLR with external sample provision:",
     double_mlplr_obj$fit()
     theta_obj = double_mlplr_obj$coef
     se_obj = double_mlplr_obj$se
-    double_mlplr_obj$bootstrap(method = 'normal',  n_rep = n_rep_boot)
+    double_mlplr_obj$bootstrap(method = "normal", n_rep = n_rep_boot)
     boot_theta_obj = double_mlplr_obj$boot_coef
 
     # External sample provision
@@ -65,7 +65,7 @@ patrick::with_parameters_test_that("PLR with external sample provision:",
     double_mlplr_obj_external$fit()
     theta_obj_external = double_mlplr_obj_external$coef
     se_obj_external = double_mlplr_obj_external$se
-    double_mlplr_obj_external$bootstrap(method = 'normal',  n_rep = n_rep_boot)
+    double_mlplr_obj_external$bootstrap(method = "normal", n_rep = n_rep_boot)
     boot_theta_obj_external = double_mlplr_obj_external$boot_coef
 
     expect_equal(theta_obj, theta_obj_external, tolerance = 1e-8)

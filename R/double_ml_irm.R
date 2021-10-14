@@ -77,20 +77,26 @@
 #'
 #' @export
 DoubleMLIRM = R6Class("DoubleMLIRM",
-  inherit = DoubleML, 
+  inherit = DoubleML,
   active = list(
     #' @field trimming_rule (`character(1)`) \cr
     #' A `character(1)` specifying the trimming approach.
     trimming_rule = function(value) {
-      if (missing(value)) return(private$trimming_rule_)
-      else stop("can't set field trimming_rule")
+      if (missing(value)) {
+        return(private$trimming_rule_)
+      } else {
+        stop("can't set field trimming_rule")
+      }
     },
 
     #' @field trimming_threshold (`numeric(1)`) \cr
     #' The threshold used for timming.
     trimming_threshold = function(value) {
-      if (missing(value)) return(private$trimming_threshold_)
-      else stop("can't set field trimming_threshold")
+      if (missing(value)) {
+        return(private$trimming_threshold_)
+      } else {
+        stop("can't set field trimming_threshold")
+      }
     }),
 
   public = list(
@@ -236,7 +242,7 @@ DoubleMLIRM = R6Class("DoubleMLIRM",
         fold_specific_params = private$fold_specific_params)
 
       g1_hat = NULL
-      if ((is.character(self$score) && self$score == "ATE") | is.function(self$score)) {
+      if ((is.character(self$score) && self$score == "ATE") || is.function(self$score)) {
         g1_hat = dml_cv_predict(self$learner$ml_g,
           c(self$data$x_cols, self$data$other_treat_cols),
           self$data$y_col,
@@ -335,7 +341,7 @@ DoubleMLIRM = R6Class("DoubleMLIRM",
         tune_settings$measure$ml_g,
         private$learner_class$ml_g)
 
-      if (self$score == "ATE" | is.function(self$score)) {
+      if ((is.character(self$score) && self$score == "ATE") || is.function(self$score)) {
         tuning_result_g1 = dml_tune(self$learner$ml_g,
           c(self$data$x_cols, self$data$other_treat_cols),
           self$data$y_col,
@@ -381,7 +387,7 @@ DoubleMLIRM = R6Class("DoubleMLIRM",
         "needs to be specified as treatment variable.")
       if (one_treat) {
         binary_treat = test_integerish(obj_dml_data$data[[obj_dml_data$d_cols]],
-                                       lower = 0, upper = 1)
+          lower = 0, upper = 1)
         if (!(one_treat & binary_treat)) {
           stop(err_msg)
         }

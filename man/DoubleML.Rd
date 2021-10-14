@@ -128,6 +128,9 @@ Standard errors for the causal parameter(s) after calling \code{fit()}.}
 \item{\code{smpls}}{(\code{list()}) \cr
 The partition used for cross-fitting.}
 
+\item{\code{smpls_cluster}}{(\code{list()}) \cr
+The partition of clusters used for cross-fitting.}
+
 \item{\code{t_stat}}{(\code{numeric()}) \cr
 t-statistics for the causal parameter(s) after calling \code{fit()}.}
 
@@ -307,7 +310,7 @@ The hyperparameter-tuning is performed using the tuning methods provided
 in the \href{https://mlr3tuning.mlr-org.com/}{mlr3tuning} package. For more
 information on tuning in \href{https://mlr3.mlr-org.com/}{mlr3}, we refer to
 the section on parameter tuning in the
-\href{https://mlr3book.mlr-org.com/tuning.html}{mlr3 book}.
+\href{https://mlr3book.mlr-org.com/optimization.html#tuning}{mlr3 book}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DoubleML$tune(
   param_set,
