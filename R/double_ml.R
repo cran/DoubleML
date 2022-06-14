@@ -378,7 +378,7 @@ DoubleML = R6Class("DoubleML",
           }
 
           # ml estimation of nuisance models and computation of psi elements
-          res = private$ml_nuisance_and_score_elements(private$get__smpls())
+          res = private$nuisance_est(private$get__smpls())
           private$psi_a_[, private$i_rep, private$i_treat] = res$psi_a
           private$psi_b_[, private$i_rep, private$i_treat] = res$psi_b
           if (store_predictions) {
@@ -771,7 +771,7 @@ DoubleML = R6Class("DoubleML",
       n_folds_tune = 5,
       rsmp_tune = mlr3::rsmp("cv", folds = 5),
       measure = NULL,
-      terminator = mlr3tunin::trm("evals", n_evals = 20),
+      terminator = mlr3tuning::trm("evals", n_evals = 20),
       algorithm = mlr3tuning::tnr("grid_search"),
       resolution = 5),
     tune_on_folds = FALSE) {
@@ -814,7 +814,7 @@ DoubleML = R6Class("DoubleML",
         if (tune_on_folds) {
           for (i_rep in 1:self$n_rep) {
             private$i_rep = i_rep
-            param_tuning = private$ml_nuisance_tuning(
+            param_tuning = private$nuisance_tuning(
               private$get__smpls(),
               param_set, tune_settings, tune_on_folds)
             private$tuning_res_[[i_treat]][[i_rep]] = param_tuning
@@ -833,7 +833,7 @@ DoubleML = R6Class("DoubleML",
           }
         } else {
           private$i_rep = 1
-          param_tuning = private$ml_nuisance_tuning(
+          param_tuning = private$nuisance_tuning(
             private$get__smpls(),
             param_set, tune_settings, tune_on_folds)
           private$tuning_res_[[i_treat]] = param_tuning
@@ -1150,7 +1150,7 @@ DoubleML = R6Class("DoubleML",
     i_treat = NA_integer_,
     fold_specific_params = NULL,
     summary_table = NULL,
-    learner_class = list(),
+    task_type = list(),
     is_cluster_data = FALSE,
     n_folds_per_cluster = NA_integer_,
     smpls_cluster_ = NULL,
@@ -1250,28 +1250,31 @@ DoubleML = R6Class("DoubleML",
         check_character(learner, max.len = 1),
         check_class(learner, "Learner"))
 
+      if (test_class(learner, "AutoTuner")) {
+        stop(paste0(
+          "Learners of class 'AutoTuner' are not supported."
+        ))
+      }
       if (is.character(learner)) {
         # warning("Learner provision by character() will be deprecated in the
         # future.")
         learner = lrn(learner)
       }
 
-      if (Regr & test_class(learner, "LearnerRegr")) {
-        private$learner_class[learner_name] = "LearnerRegr"
-      }
-      if (Classif & test_class(learner, "LearnerClassif")) {
-        private$learner_class[learner_name] = "LearnerClassif"
+      if ((Regr & learner$task_type == "regr") |
+        (Classif & learner$task_type == "classif")) {
+        private$task_type[learner_name] = learner$task_type
       }
 
-      if ((Regr & !Classif & !test_class(learner, "LearnerRegr"))) {
+      if ((Regr & !Classif & !learner$task_type == "regr")) {
         stop(paste0(
           "Invalid learner provided for ", learner_name,
-          ": must be of class 'LearnerRegr'"))
+          ": 'learner$task_type' must be 'regr'"))
       }
-      if ((Classif & !Regr & !test_class(learner, "LearnerClassif"))) {
+      if ((Classif & !Regr & !learner$task_type == "classif")) {
         stop(paste0(
           "Invalid learner provided for ", learner_name,
-          ": must be of class 'LearnerClassif'"))
+          ": 'learner$task_type must be 'classif'"))
       }
       invisible(learner)
     },
@@ -1308,7 +1311,7 @@ DoubleML = R6Class("DoubleML",
         tune_settings$rsmp_tune = rsmp("cv", folds = tune_settings$n_folds_tune)
       }
 
-      if (test_names(names(tune_settings), must.include = "measure")) {
+      if (test_names(names(tune_settings), must.include = "measure") && !is.null(tune_settings$measure)) {
         assert_list(tune_settings$measure)
         if (!test_names(names(tune_settings$measure),
           subset.of = valid_learner)) {
@@ -1324,16 +1327,15 @@ DoubleML = R6Class("DoubleML",
             check_class(tune_settings$measure[[i_msr]], "Measure"))
         }
       } else {
-        tune_settings$measure = rep(list(NA), length(valid_learner))
+        tune_settings$measure = rep(list(NULL), length(valid_learner))
         names(tune_settings$measure) = valid_learner
       }
 
-      for (i_msr in seq_len(length(tune_settings$measure))) {
-        if (!test_class(tune_settings$measure[[i_msr]], "Measure")) {
-          this_learner = names(tune_settings$measure)[i_msr]
+      for (this_learner in valid_learner) {
+        if (!test_class(tune_settings$measure[[this_learner]], "Measure")) {
           tune_settings$measure[[this_learner]] = set_default_measure(
             tune_settings$measure[[this_learner]],
-            private$learner_class[[this_learner]])
+            private$task_type[[this_learner]])
         }
       }
 

@@ -2,10 +2,12 @@
 dml_cv_predict = function(learner, X_cols, y_col,
   data_model, nuisance_id,
   smpls = NULL, est_params = NULL,
-  return_train_preds = FALSE, learner_class = NULL,
+  return_train_preds = FALSE, task_type = NULL,
   fold_specific_params = FALSE) {
 
-  # TODO: Asserts
+  valid_task_type = c("regr", "classif")
+  assertChoice(task_type, valid_task_type)
+  # TODO: extend asserts
 
   if (fold_specific_params) {
     stopifnot(length(smpls$train_ids) == length(smpls$test_ids))
@@ -19,20 +21,20 @@ dml_cv_predict = function(learner, X_cols, y_col,
       id = nuisance_id, data = data_model,
       target = y_col,
       select_cols = X_cols,
-      learner_class = learner_class)
+      task_type = task_type)
 
     if (!fold_specific_params) {
       ml_learner = initiate_learner(
-        learner, learner_class,
+        learner, task_type,
         est_params, return_train_preds)
       resampling_smpls = rsmp("custom")$instantiate(
         task_pred, smpls$train_ids,
         smpls$test_ids)
       resampling_pred = resample(task_pred, ml_learner, resampling_smpls,
         store_models = TRUE)
-      preds = extract_prediction(resampling_pred, learner_class, n_obs)
+      preds = extract_prediction(resampling_pred, task_type, n_obs)
       if (return_train_preds) {
-        train_preds = extract_prediction(resampling_pred, learner_class, n_obs,
+        train_preds = extract_prediction(resampling_pred, task_type, n_obs,
           return_train_preds = TRUE)
       }
     } else {
@@ -42,7 +44,7 @@ dml_cv_predict = function(learner, X_cols, y_col,
         function(x) {
           initiate_learner(
             learner,
-            learner_class, x,
+            task_type, x,
             return_train_preds)
         })
       resampling_smpls = lapply(
@@ -59,9 +61,9 @@ dml_cv_predict = function(learner, X_cols, y_col,
           store_models = TRUE)
       })
 
-      preds = extract_prediction(resampling_pred, learner_class, n_obs)
+      preds = extract_prediction(resampling_pred, task_type, n_obs)
       if (return_train_preds) {
-        train_preds = extract_prediction(resampling_pred, learner_class,
+        train_preds = extract_prediction(resampling_pred, task_type,
           n_obs,
           return_train_preds = TRUE)
       }
@@ -73,11 +75,11 @@ dml_cv_predict = function(learner, X_cols, y_col,
         id = nuisance_id, data = x,
         target = y_col,
         select_cols = X_cols,
-        learner_class = learner_class)
+        task_type = task_type)
     })
     # fold_specific_target == TRUE; only required for pliv_partialXZ
     if (!fold_specific_params) {
-      ml_learner = initiate_learner(learner, learner_class, est_params)
+      ml_learner = initiate_learner(learner, task_type, est_params)
 
       resampling_smpls = lapply(
         seq_len(length(data_model)),
@@ -94,12 +96,12 @@ dml_cv_predict = function(learner, X_cols, y_col,
             resampling_smpls[[x]],
             store_models = TRUE)
         })
-      preds = extract_prediction(resampling_pred, learner_class, n_obs)
+      preds = extract_prediction(resampling_pred, task_type, n_obs)
     } else {
       # learners initiated according to fold-specific learners, proceed foldwise
       ml_learners = lapply(
         est_params,
-        function(x) initiate_learner(learner, learner_class, x))
+        function(x) initiate_learner(learner, task_type, x))
       resampling_smpls = lapply(seq_len(length(smpls$train_ids)), function(x) {
         rsmp("custom")$instantiate(
           task_pred[[x]], list(smpls$train_ids[[x]]),
@@ -110,7 +112,7 @@ dml_cv_predict = function(learner, X_cols, y_col,
           resampling_smpls[[x]],
           store_models = TRUE)
       })
-      preds = extract_prediction(resampling_pred, learner_class, n_obs)
+      preds = extract_prediction(resampling_pred, task_type, n_obs)
     }
   }
   if (return_train_preds) {
@@ -121,16 +123,20 @@ dml_cv_predict = function(learner, X_cols, y_col,
 }
 
 dml_tune = function(learner, X_cols, y_col, data_tune_list,
-  nuisance_id, param_set, tune_settings, measure, learner_class) {
+  nuisance_id, param_set, tune_settings, measure, task_type) {
+
   task_tune = lapply(data_tune_list, function(x) {
     initiate_task(
       id = nuisance_id,
       data = x,
       target = y_col,
       select_cols = X_cols,
-      learner_class = learner_class)
+      task_type = task_type)
   })
-  ml_learner = initiate_learner(learner, learner_class, params = learner$param_set$values)
+  valid_task_type = c("regr", "classif")
+  assertChoice(task_type, valid_task_type)
+
+  ml_learner = initiate_learner(learner, task_type, params = learner$param_set$values)
   tuning_instance = lapply(task_tune, function(x) {
     TuningInstanceSingleCrit$new(
       task = x,
@@ -152,16 +158,20 @@ dml_tune = function(learner, X_cols, y_col, data_tune_list,
     "params" = params))
 }
 
-extract_prediction = function(obj_resampling, learner_class, n_obs,
+extract_prediction = function(obj_resampling, task_type, n_obs,
   return_train_preds = FALSE) {
+
+  valid_task_type = c("regr", "classif")
+  assertChoice(task_type, valid_task_type)
+
   if (compareVersion(as.character(packageVersion("mlr3")), "0.11.0") < 0) {
     ind_name = "row_id"
   } else {
     ind_name = "row_ids"
   }
-  if (learner_class == "LearnerRegr") {
+  if (task_type == "regr") {
     resp_name = "response"
-  } else if (learner_class == "LearnerClassif") {
+  } else if (task_type == "classif") {
     resp_name = "prob.1"
   }
 
@@ -190,7 +200,9 @@ extract_prediction = function(obj_resampling, learner_class, n_obs,
     }
   } else {
     preds = rep(NA_real_, n_obs)
-    if (testR6(obj_resampling, classes = "ResampleResult")) obj_resampling = list(obj_resampling)
+    if (testR6(obj_resampling, classes = "ResampleResult")) {
+      obj_resampling = list(obj_resampling)
+    }
     n_obj_rsmp = length(obj_resampling)
     for (i_obj_rsmp in 1:n_obj_rsmp) {
       f_hat = as.data.table(obj_resampling[[i_obj_rsmp]]$prediction("test"))
@@ -201,16 +213,22 @@ extract_prediction = function(obj_resampling, learner_class, n_obs,
   return(preds)
 }
 
-initiate_learner = function(learner, learner_class, params, return_train_preds = FALSE) {
+initiate_learner = function(learner, task_type, params, return_train_preds = FALSE) {
+
+  valid_task_type = c("regr", "classif")
+  assertChoice(task_type, valid_task_type)
+
   ml_learner = learner$clone()
 
   if (!is.null(params)) {
-    ml_learner$param_set$values = insert_named(ml_learner$param_set$values, params)
+    ml_learner$param_set$values = insert_named(
+      ml_learner$param_set$values,
+      params)
   } # else if (is.null(params) | length(params) == 0) {
   # message("No parameters provided for learners. Default values are used.")
   # }
 
-  if (learner_class == "LearnerClassif") {
+  if (task_type == "classif") {
     ml_learner$predict_type = "prob"
   }
   if (return_train_preds) {
@@ -220,14 +238,17 @@ initiate_learner = function(learner, learner_class, params, return_train_preds =
 }
 
 # Function to initialize task (regression or classification)
-initiate_task = function(id, data, target, select_cols, learner_class) {
+initiate_task = function(id, data, target, select_cols, task_type) {
+  valid_task_type = c("regr", "classif")
+  assertChoice(task_type, valid_task_type)
+
   if (!is.null(select_cols)) {
     indx = (names(data) %in% c(select_cols, target))
     data = data[, indx, with = FALSE]
   }
-  if (learner_class == "LearnerRegr") {
+  if (task_type == "regr") {
     task = TaskRegr$new(id = id, backend = data, target = target)
-  } else if (learner_class == "LearnerClassif") {
+  } else if (task_type == "classif") {
     data[[target]] = factor(data[[target]])
     assert_set_equal(
       levels(data[[target]]),
@@ -272,11 +293,14 @@ get_cond_samples = function(smpls, D) {
       "test_ids" = smpls$test_ids)))
 }
 
-set_default_measure = function(measure_in = NA, learner_class) {
-  if (is.na(measure_in)) {
-    if (learner_class == "LearnerRegr") {
+set_default_measure = function(measure_in = NA, task_type) {
+  valid_task_type = c("regr", "classif")
+  assertChoice(task_type, valid_task_type)
+
+  if (is.null(measure_in)) {
+    if (task_type == "regr") {
       measure = msr("regr.mse")
-    } else if (learner_class == "LearnerClassif") {
+    } else if (task_type == "classif") {
       measure = msr("classif.ce")
     }
   } else if (is.character(measure_in)) {

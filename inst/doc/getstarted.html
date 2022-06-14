@@ -41,6 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
     </style>
 
 
+
 <style type="text/css">
   code {
     white-space: pre;
@@ -446,9 +447,11 @@ D = m_0(X) + V, &amp; &amp;\mathbb{E}(V | X) = 0,
 <h2>Estimate double/debiased machine learning models</h2>
 <p>We now initialize <code>DoubleMLPLR</code> objects for our examples using default parameters. The models are estimated by calling the <code>fit()</code> method and we can for example inspect the estimated treatment effect using the <code>summary()</code> method. A more detailed result summary can be obtained via the <code>print()</code> method. Besides the <code>fit()</code> method <code>DoubleML</code> model classes also provide functionalities to perform statistical inference like <code>bootstrap()</code>, <code>confint()</code> and <code>p_adjust()</code>, for details see the user guide Variance estimation, confidence intervals and boostrap standard errors.</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">set.seed</span>(<span class="dv">3141</span>)</span>
-<span id="cb11-2"><a href="#cb11-2"></a>obj_dml_plr_bonus =<span class="st"> </span>DoubleMLPLR<span class="op">$</span><span class="kw">new</span>(dml_data_bonus, <span class="dt">ml_g=</span>ml_g_bonus, <span class="dt">ml_m=</span>ml_m_bonus)</span>
-<span id="cb11-3"><a href="#cb11-3"></a>obj_dml_plr_bonus<span class="op">$</span><span class="kw">fit</span>()</span>
-<span id="cb11-4"><a href="#cb11-4"></a><span class="kw">print</span>(obj_dml_plr_bonus)</span></code></pre></div>
+<span id="cb11-2"><a href="#cb11-2"></a>obj_dml_plr_bonus =<span class="st"> </span>DoubleMLPLR<span class="op">$</span><span class="kw">new</span>(dml_data_bonus, <span class="dt">ml_g=</span>ml_g_bonus, <span class="dt">ml_m=</span>ml_m_bonus)</span></code></pre></div>
+<pre><code>## Warning: The argument ml_g was renamed to ml_l. Please adapt the argument name accordingly. ml_g is redirected to ml_l.
+## The redirection will be removed in a future version.</code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>obj_dml_plr_bonus<span class="op">$</span><span class="kw">fit</span>()</span>
+<span id="cb13-2"><a href="#cb13-2"></a><span class="kw">print</span>(obj_dml_plr_bonus)</span></code></pre></div>
 <pre><code>## ================= DoubleMLPLR Object ==================
 ## 
 ## 
@@ -464,7 +467,7 @@ D = m_0(X) + V, &amp; &amp;\mathbb{E}(V | X) = 0,
 ## DML algorithm: dml2
 ## 
 ## ------------------ Machine learner   ------------------
-## ml_g: regr.ranger
+## ml_l: regr.ranger
 ## ml_m: regr.ranger
 ## 
 ## ------------------ Resampling        ------------------
@@ -478,9 +481,11 @@ D = m_0(X) + V, &amp; &amp;\mathbb{E}(V | X) = 0,
 ## tg  -0.07385    0.03528  -2.093   0.0364 *
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>obj_dml_plr_sim =<span class="st"> </span>DoubleMLPLR<span class="op">$</span><span class="kw">new</span>(dml_data_sim, <span class="dt">ml_g=</span>ml_g_sim, <span class="dt">ml_m=</span>ml_m_sim)</span>
-<span id="cb13-2"><a href="#cb13-2"></a>obj_dml_plr_sim<span class="op">$</span><span class="kw">fit</span>()</span>
-<span id="cb13-3"><a href="#cb13-3"></a><span class="kw">print</span>(obj_dml_plr_sim)</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>obj_dml_plr_sim =<span class="st"> </span>DoubleMLPLR<span class="op">$</span><span class="kw">new</span>(dml_data_sim, <span class="dt">ml_g=</span>ml_g_sim, <span class="dt">ml_m=</span>ml_m_sim)</span></code></pre></div>
+<pre><code>## Warning: The argument ml_g was renamed to ml_l. Please adapt the argument name accordingly. ml_g is redirected to ml_l.
+## The redirection will be removed in a future version.</code></pre>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>obj_dml_plr_sim<span class="op">$</span><span class="kw">fit</span>()</span>
+<span id="cb17-2"><a href="#cb17-2"></a><span class="kw">print</span>(obj_dml_plr_sim)</span></code></pre></div>
 <pre><code>## ================= DoubleMLPLR Object ==================
 ## 
 ## 
@@ -496,7 +501,7 @@ D = m_0(X) + V, &amp; &amp;\mathbb{E}(V | X) = 0,
 ## DML algorithm: dml2
 ## 
 ## ------------------ Machine learner   ------------------
-## ml_g: regr.glmnet
+## ml_l: regr.glmnet
 ## ml_m: regr.glmnet
 ## 
 ## ------------------ Resampling        ------------------

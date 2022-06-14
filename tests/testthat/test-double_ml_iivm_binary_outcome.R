@@ -1,4 +1,4 @@
-context("Unit tests for IIVM")
+context("Unit tests for IIVM, binary outcome")
 
 library("mlr3learners")
 
@@ -7,17 +7,17 @@ lgr::get_logger("mlr3")$set_threshold("warn")
 on_cran = !identical(Sys.getenv("NOT_CRAN"), "true")
 if (on_cran) {
   test_cases = expand.grid(
-    learner = "rpart",
+    learner = "log_reg",
     dml_procedure = "dml2",
     score = "LATE",
-    trimming_threshold = c(1e-5),
+    trimming_threshold = 0.025,
     stringsAsFactors = FALSE)
 } else {
   test_cases = expand.grid(
-    learner = c("cv_glmnet", "graph_learner"),
+    learner = "cv_glmnet",
     dml_procedure = c("dml1", "dml2"),
     score = "LATE",
-    trimming_threshold = c(1e-5),
+    trimming_threshold = 0.025,
     stringsAsFactors = FALSE)
 }
 
@@ -25,33 +25,34 @@ test_cases[".test_name"] = apply(test_cases, 1, paste, collapse = "_")
 
 patrick::with_parameters_test_that("Unit tests for IIVM:",
   .cases = test_cases, {
-    learner_pars = get_default_mlmethod_iivm(learner)
+    learner_pars = get_default_mlmethod_iivm_binary(learner)
     n_rep_boot = 498
 
     set.seed(3141)
-    iivm_hat = dml_irmiv(data_iivm$df,
+    iivm_hat = dml_irmiv(data_iivm_binary$df,
       y = "y", d = "d", z = "z",
       n_folds = 5,
       ml_g = learner_pars$ml_g$clone(),
       ml_m = learner_pars$ml_m$clone(),
       ml_r = learner_pars$ml_r$clone(),
-      dml_procedure = dml_procedure, score = score,
-      trimming_threshold = trimming_threshold)
+      dml_procedure = dml_procedure,
+      trimming_threshold = trimming_threshold,
+      score = score)
     theta = iivm_hat$coef
     se = iivm_hat$se
 
     boot_theta = bootstrap_irmiv(iivm_hat$thetas, iivm_hat$ses,
-      data_iivm$df,
+      data_iivm_binary$df,
       y = "y", d = "d", z = "z",
       n_folds = 5, smpls = iivm_hat$smpls,
       all_preds = iivm_hat$all_preds,
+      trimming_threshold = trimming_threshold,
       score = score,
-      bootstrap = "normal", n_rep_boot = n_rep_boot,
-      trimming_threshold = trimming_threshold)$boot_coef
+      bootstrap = "normal", n_rep_boot = n_rep_boot)$boot_coef
 
     set.seed(3141)
     double_mliivm_obj = DoubleMLIIVM$new(
-      data = data_iivm$dml_data,
+      data = data_iivm_binary$dml_data,
       n_folds = 5,
       ml_g = learner_pars$ml_g$clone(),
       ml_m = learner_pars$ml_m$clone(),
