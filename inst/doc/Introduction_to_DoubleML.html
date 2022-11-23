@@ -11,35 +11,32 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2022-08-19" />
+<meta name="date" content="2022-11-23" />
 
 <title>DoubleML - An Object-Oriented Implementation of Double Machine Learning in R</title>
 
-<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
-// v0.0.1
-// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
-
-document.addEventListener('DOMContentLoaded', function() {
-  const codeList = document.getElementsByClassName("sourceCode");
-  for (var i = 0; i < codeList.length; i++) {
-    var linkList = codeList[i].getElementsByTagName('a');
-    for (var j = 0; j < linkList.length; j++) {
-      if (linkList[j].innerHTML === "") {
-        linkList[j].setAttribute('aria-hidden', 'true');
-      }
-    }
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
   }
 });
 </script>
 
 <style type="text/css">
-  code{white-space: pre-wrap;}
-  span.smallcaps{font-variant: small-caps;}
-  span.underline{text-decoration: underline;}
-  div.column{display: inline-block; vertical-align: top; width: 50%;}
-  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-  ul.task-list{list-style: none;}
-    </style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
 
 
 
@@ -239,30 +236,55 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 
-<h1 class="title toc-ignore">DoubleML - An Object-Oriented Implementation of Double Machine Learning in R</h1>
-<h4 class="date">2022-08-19</h4>
+<h1 class="title toc-ignore">DoubleML - An Object-Oriented
+Implementation of Double Machine Learning in R</h1>
+<h4 class="date">2022-11-23</h4>
 
 
 
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
-<p>The R package <code>DoubleML</code> implements the double/debiased machine learning framework of Chernozhukov et al. (2018). It provides functionalities to estimate parameters in causal models based on machine learning methods. The double machine learning framework consist of three key ingredients:</p>
+<p>The R package <code>DoubleML</code> implements the double/debiased
+machine learning framework of Chernozhukov et al. (2018). It provides
+functionalities to estimate parameters in causal models based on machine
+learning methods. The double machine learning framework consist of three
+key ingredients:</p>
 <ul>
 <li>Neyman orthogonality,</li>
 <li>High-quality machine learning estimation and</li>
 <li>Sample splitting.</li>
 </ul>
-<p>Estimation of nuisance components can be performed by various state-of-the-art machine learning methods that are available in the <code>mlr3</code> ecosystem (Lang et al., 2019). <code>DoubleML</code> makes it possible to perform inference in a variety of causal models, including partially linear and interactive regression models and their extensions to instrumental variable estimation. The object-oriented implementation of <code>DoubleML</code> enables a high flexibility for the model specification and makes it easily extendable. This paper serves as an introduction to the double machine learning framework and the R package <code>DoubleML</code>. In reproducible code examples with simulated and real data sets, we demonstrate how <code>DoubleML</code> users can perform valid inference based on machine learning methods.</p>
+<p>Estimation of nuisance components can be performed by various
+state-of-the-art machine learning methods that are available in the
+<code>mlr3</code> ecosystem (Lang et al., 2019). <code>DoubleML</code>
+makes it possible to perform inference in a variety of causal models,
+including partially linear and interactive regression models and their
+extensions to instrumental variable estimation. The object-oriented
+implementation of <code>DoubleML</code> enables a high flexibility for
+the model specification and makes it easily extendable. This paper
+serves as an introduction to the double machine learning framework and
+the R package <code>DoubleML</code>. In reproducible code examples with
+simulated and real data sets, we demonstrate how <code>DoubleML</code>
+users can perform valid inference based on machine learning methods.</p>
 </div>
 <div id="long-package-vignette" class="section level1">
 <h1>Long Package Vignette</h1>
-<p><a href="https://arxiv.org/abs/2103.09603">A long version of this package vignette is available as a preprint via arxiv:2103.09603</a></p>
+<p><a href="https://arxiv.org/abs/2103.09603">A long version of this
+package vignette is available as a preprint via arxiv:2103.09603</a></p>
 </div>
 <div id="references" class="section level1">
 <h1>References:</h1>
-<p>Bach, P., Chernozhukov, V., Kurz, M. S., and Spindler, M. (2021), DoubleML - An Object-Oriented Implementation of Double Machine Learning in R, arXiv:<a href="https://arxiv.org/abs/2103.09603">2103.09603</a>.</p>
-<p>Chernozhukov, V., Chetverikov, D., Demirer, M., Duflo, E., Hansen, C., Newey, W. and Robins, J. (2018), Double/debiased machine learning for treatment and structural parameters. The Econometrics Journal, 21: C1-C68, URL: <a href="https://doi.org/10.1111/ectj.12097" class="uri">https://doi.org/10.1111/ectj.12097</a>.</p>
-<p>Lang, M., Binder, M., Richter, J., Schratz, P., Pfisterer, F., Coors, S., Au, Q., Casalicchio, G., Kotthoff, L. and Bischl, B. (2019), mlr3: A modern object-oriented machine learing framework in R. Journal of Open Source Software, <a href="https://doi.org/10.21105/joss.01903" class="uri">https://doi.org/10.21105/joss.01903</a>, URL: <a href="https://mlr3.mlr-org.com/" class="uri">https://mlr3.mlr-org.com/</a>.</p>
+<p>Bach, P., Chernozhukov, V., Kurz, M. S., and Spindler, M. (2021),
+DoubleML - An Object-Oriented Implementation of Double Machine Learning
+in R, arXiv:<a href="https://arxiv.org/abs/2103.09603">2103.09603</a>.</p>
+<p>Chernozhukov, V., Chetverikov, D., Demirer, M., Duflo, E., Hansen,
+C., Newey, W. and Robins, J. (2018), Double/debiased machine learning
+for treatment and structural parameters. The Econometrics Journal, 21:
+C1-C68, URL: <a href="https://doi.org/10.1111/ectj.12097" class="uri">https://doi.org/10.1111/ectj.12097</a>.</p>
+<p>Lang, M., Binder, M., Richter, J., Schratz, P., Pfisterer, F., Coors,
+S., Au, Q., Casalicchio, G., Kotthoff, L. and Bischl, B. (2019), mlr3: A
+modern object-oriented machine learing framework in R. Journal of Open
+Source Software, <a href="https://doi.org/10.21105/joss.01903" class="uri">https://doi.org/10.21105/joss.01903</a>, URL: <a href="https://mlr3.mlr-org.com/" class="uri">https://mlr3.mlr-org.com/</a>.</p>
 </div>
 
 
