@@ -35,7 +35,7 @@ dml_data_bonus = DoubleMLData$new(df_bonus,
 print(dml_data_bonus)
 
 # matrix interface to DoubleMLData
-dml_data_sim = double_ml_data_from_matrix(X=X, y=y, d=d)
+dml_data_sim = double_ml_data_from_matrix(X = X, y = y, d = d)
 dml_data_sim
 
 ## -----------------------------------------------------------------------------
@@ -44,21 +44,21 @@ library(mlr3learners)
 # surpress messages from mlr3 package during fitting
 lgr::get_logger("mlr3")$set_threshold("warn")
 
-learner = lrn("regr.ranger", num.trees=500, mtry=floor(sqrt(n_vars)), max.depth=5, min.node.size=2)
-ml_g_bonus = learner$clone()
+learner = lrn("regr.ranger", num.trees = 500, max.depth = 5, min.node.size = 2)
+ml_l_bonus = learner$clone()
 ml_m_bonus = learner$clone()
 
 learner = lrn("regr.glmnet", lambda = sqrt(log(n_vars)/(n_obs)))
-ml_g_sim = learner$clone()
+ml_l_sim = learner$clone()
 ml_m_sim = learner$clone()
 
 ## -----------------------------------------------------------------------------
 set.seed(3141)
-obj_dml_plr_bonus = DoubleMLPLR$new(dml_data_bonus, ml_g=ml_g_bonus, ml_m=ml_m_bonus)
+obj_dml_plr_bonus = DoubleMLPLR$new(dml_data_bonus, ml_l = ml_l_bonus, ml_m = ml_m_bonus)
 obj_dml_plr_bonus$fit()
 print(obj_dml_plr_bonus)
 
-obj_dml_plr_sim = DoubleMLPLR$new(dml_data_sim, ml_g=ml_g_sim, ml_m=ml_m_sim)
+obj_dml_plr_sim = DoubleMLPLR$new(dml_data_sim, ml_l = ml_l_sim, ml_m = ml_m_sim)
 obj_dml_plr_sim$fit()
 print(obj_dml_plr_sim)
 

@@ -429,7 +429,7 @@ as shown below for the simulated data.</p>
 ## Instrument(s): 
 ## No. Observations: 5099</code></pre>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># matrix interface to DoubleMLData</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>dml_data_sim <span class="ot">=</span> <span class="fu">double_ml_data_from_matrix</span>(<span class="at">X=</span>X, <span class="at">y=</span>y, <span class="at">d=</span>d)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>dml_data_sim <span class="ot">=</span> <span class="fu">double_ml_data_from_matrix</span>(<span class="at">X =</span> X, <span class="at">y =</span> y, <span class="at">d =</span> d)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>dml_data_sim</span></code></pre></div>
 <pre><code>## ================= DoubleMLData Object ==================
 ## 
@@ -456,12 +456,12 @@ guide Learners, hyperparameters and hyperparameter tuning.</p>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># surpress messages from mlr3 package during fitting</span></span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>lgr<span class="sc">::</span><span class="fu">get_logger</span>(<span class="st">&quot;mlr3&quot;</span>)<span class="sc">$</span><span class="fu">set_threshold</span>(<span class="st">&quot;warn&quot;</span>)</span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>learner <span class="ot">=</span> <span class="fu">lrn</span>(<span class="st">&quot;regr.ranger&quot;</span>, <span class="at">num.trees=</span><span class="dv">500</span>, <span class="at">mtry=</span><span class="fu">floor</span>(<span class="fu">sqrt</span>(n_vars)), <span class="at">max.depth=</span><span class="dv">5</span>, <span class="at">min.node.size=</span><span class="dv">2</span>)</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>ml_g_bonus <span class="ot">=</span> learner<span class="sc">$</span><span class="fu">clone</span>()</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>learner <span class="ot">=</span> <span class="fu">lrn</span>(<span class="st">&quot;regr.ranger&quot;</span>, <span class="at">num.trees =</span> <span class="dv">500</span>, <span class="at">max.depth =</span> <span class="dv">5</span>, <span class="at">min.node.size =</span> <span class="dv">2</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>ml_l_bonus <span class="ot">=</span> learner<span class="sc">$</span><span class="fu">clone</span>()</span>
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>ml_m_bonus <span class="ot">=</span> learner<span class="sc">$</span><span class="fu">clone</span>()</span>
 <span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>learner <span class="ot">=</span> <span class="fu">lrn</span>(<span class="st">&quot;regr.glmnet&quot;</span>, <span class="at">lambda =</span> <span class="fu">sqrt</span>(<span class="fu">log</span>(n_vars)<span class="sc">/</span>(n_obs)))</span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>ml_g_sim <span class="ot">=</span> learner<span class="sc">$</span><span class="fu">clone</span>()</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>ml_l_sim <span class="ot">=</span> learner<span class="sc">$</span><span class="fu">clone</span>()</span>
 <span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>ml_m_sim <span class="ot">=</span> learner<span class="sc">$</span><span class="fu">clone</span>()</span></code></pre></div>
 </div>
 <div id="cross-fitting-dml-algorithms-and-neyman-orthogonal-score-functions" class="section level2">
@@ -480,10 +480,14 @@ we can further set parameters specifying the resampling:</p>
 <code>dml_procedure</code> (defaults to <code>&quot;dml2&quot;</code>). Depending
 on the causal model, one can further choose between different
 Neyman-orthogonal score / moment functions. For the PLR model the
-default score is <code>&quot;partialling out&quot;</code>.</p>
-<p>The user guide provides details about the Sample-splitting,
-cross-fitting and repeated cross-fitting, the Double machine learning
-algorithms and the Score functions</p>
+default score is <code>&quot;partialling out&quot;</code>, i.e., <span class="math display">\[\begin{align}\begin{aligned}\psi(W; \theta, \eta)
+&amp;:= [Y - \ell(X) - \theta (D - m(X))] [D -
+m(X)].\end{aligned}\end{align}\]</span></p>
+<p>Note that with this score, we do not estimate <span class="math inline">\(g_0(X)\)</span> directly, but the conditional
+expectation of <span class="math inline">\(Y\)</span> given <span class="math inline">\(X\)</span>, <span class="math inline">\(\ell_0(X)
+= E[Y|X]\)</span>. The user guide provides details about the
+Sample-splitting, cross-fitting and repeated cross-fitting, the Double
+machine learning algorithms and the Score functions</p>
 </div>
 <div id="estimate-doubledebiased-machine-learning-models" class="section level2">
 <h2>Estimate double/debiased machine learning models</h2>
@@ -498,11 +502,9 @@ inference like <code>bootstrap()</code>, <code>confint()</code> and
 <code>p_adjust()</code>, for details see the user guide Variance
 estimation, confidence intervals and boostrap standard errors.</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">3141</span>)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>obj_dml_plr_bonus <span class="ot">=</span> DoubleMLPLR<span class="sc">$</span><span class="fu">new</span>(dml_data_bonus, <span class="at">ml_g=</span>ml_g_bonus, <span class="at">ml_m=</span>ml_m_bonus)</span></code></pre></div>
-<pre><code>## Warning: The argument ml_g was renamed to ml_l. Please adapt the argument name accordingly. ml_g is redirected to ml_l.
-## The redirection will be removed in a future version.</code></pre>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>obj_dml_plr_bonus<span class="sc">$</span><span class="fu">fit</span>()</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(obj_dml_plr_bonus)</span></code></pre></div>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>obj_dml_plr_bonus <span class="ot">=</span> DoubleMLPLR<span class="sc">$</span><span class="fu">new</span>(dml_data_bonus, <span class="at">ml_l =</span> ml_l_bonus, <span class="at">ml_m =</span> ml_m_bonus)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>obj_dml_plr_bonus<span class="sc">$</span><span class="fu">fit</span>()</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(obj_dml_plr_bonus)</span></code></pre></div>
 <pre><code>## ================= DoubleMLPLR Object ==================
 ## 
 ## 
@@ -529,14 +531,12 @@ estimation, confidence intervals and boostrap standard errors.</p>
 ## ------------------ Fit summary       ------------------
 ##  Estimates and significance testing of the effect of target variables
 ##    Estimate. Std. Error t value Pr(&gt;|t|)  
-## tg  -0.07385    0.03528  -2.093   0.0364 *
+## tg  -0.07561    0.03536  -2.139   0.0325 *
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>obj_dml_plr_sim <span class="ot">=</span> DoubleMLPLR<span class="sc">$</span><span class="fu">new</span>(dml_data_sim, <span class="at">ml_g=</span>ml_g_sim, <span class="at">ml_m=</span>ml_m_sim)</span></code></pre></div>
-<pre><code>## Warning: The argument ml_g was renamed to ml_l. Please adapt the argument name accordingly. ml_g is redirected to ml_l.
-## The redirection will be removed in a future version.</code></pre>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>obj_dml_plr_sim<span class="sc">$</span><span class="fu">fit</span>()</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(obj_dml_plr_sim)</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>obj_dml_plr_sim <span class="ot">=</span> DoubleMLPLR<span class="sc">$</span><span class="fu">new</span>(dml_data_sim, <span class="at">ml_l =</span> ml_l_sim, <span class="at">ml_m =</span> ml_m_sim)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>obj_dml_plr_sim<span class="sc">$</span><span class="fu">fit</span>()</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(obj_dml_plr_sim)</span></code></pre></div>
 <pre><code>## ================= DoubleMLPLR Object ==================
 ## 
 ## 
