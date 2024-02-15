@@ -2,10 +2,10 @@
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_chunk$set(eval = TRUE)
 
-## ---- eval = FALSE------------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  remotes::install_github("DoubleML/doubleml-for-r")
 
-## ---- message=FALSE, warning=FALSE--------------------------------------------
+## ----message=FALSE, warning=FALSE---------------------------------------------
 library(DoubleML)
 
 ## -----------------------------------------------------------------------------

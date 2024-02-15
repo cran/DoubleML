@@ -30,18 +30,18 @@ Documentation of functions in R:
 User guide: <https://docs.doubleml.org>
 
 **DoubleML** is currently maintained by
-[`@MalteKurz`](https://github.com/MalteKurz) and
-[`@PhilippBach`](https://github.com/PhilippBach).
+[`@PhilippBach`](https://github.com/PhilippBach) and
+[`@SvenKlaassen`](https://github.com/SvenKlaassen).
 
 ## Main Features
 
 Double / debiased machine learning framework of [Chernozhukov et
 al. (2018)](https://arxiv.org/abs/1608.00060) for
 
--   Partially linear regression models (PLR)
--   Partially linear IV regression models (PLIV)
--   Interactive regression models (IRM)
--   Interactive IV regression models (IIVM)
+- Partially linear regression models (PLR)
+- Partially linear IV regression models (PLIV)
+- Interactive regression models (IRM)
+- Interactive IV regression models (IIVM)
 
 The object-oriented implementation of **DoubleML** that is based on the
 [R6 package for R](https://r6.r-lib.org/) is very flexible. The model
@@ -55,22 +55,27 @@ learning models and to perform statistical inference via the methods
 object-oriented implementation allows a high flexibility for the model
 specification in terms of …
 
--   … the machine learning methods for estimation of the nuisance
-    functions,
--   … the resampling schemes,
--   … the double machine learning algorithm,
--   … the Neyman orthogonal score functions,
--   …
+- … the machine learning methods for estimation of the nuisance
+  functions,
+- … the resampling schemes,
+- … the double machine learning algorithm,
+- … the Neyman orthogonal score functions,
+- …
 
 It further can be readily extended with regards to
 
--   … new model classes that come with Neyman orthogonal score functions
-    being linear in the target parameter,
--   … alternative score functions via callables,
--   … alternative resampling schemes,
--   …
+- … new model classes that come with Neyman orthogonal score functions
+  being linear in the target parameter,
+- … alternative score functions via callables,
+- … alternative resampling schemes,
+- …
 
-![OOP structure of the DoubleML package](man/figures/oop.svg?raw=true)
+<figure>
+<img src="man/figures/oop.svg?raw=true"
+alt="OOP structure of the DoubleML package" />
+<figcaption aria-hidden="true">OOP structure of the DoubleML
+package</figcaption>
+</figure>
 
 ## Installation
 
@@ -88,18 +93,18 @@ remotes::install_github("DoubleML/doubleml-for-r")
 
 **DoubleML** requires
 
--   R (\>= 3.5.0)
--   R6 (\>= 2.4.1)
--   data.table (\>= 1.12.8)
--   stats
--   checkmate
--   mlr3 (\>= 0.5.0)
--   mlr3tuning (\>= 0.3.0)
--   mlr3learners (\>= 0.3.0)
--   mvtnorm
--   utils
--   clusterGeneration
--   readstata13
+- R (\>= 3.5.0)
+- R6 (\>= 2.4.1)
+- data.table (\>= 1.12.8)
+- stats
+- checkmate
+- mlr3 (\>= 0.5.0)
+- mlr3tuning (\>= 0.3.0)
+- mlr3learners (\>= 0.3.0)
+- mvtnorm
+- utils
+- clusterGeneration
+- readstata13
 
 ## Contributing
 
@@ -122,11 +127,13 @@ Bibtex-entry:
 
     @misc{DoubleML2020,
           title={{DoubleML} -- {A}n Object-Oriented Implementation of Double Machine Learning in {R}}, 
-          author={P. Bach and V. Chernozhukov and M. S. Kurz and M. Spindler},
-          year={2021},
-          eprint={2103.09603},
-          archivePrefix={arXiv},
-          primaryClass={stat.ML},
+          author={P. Bach and V. Chernozhukov and M. S. Kurz and M. Spindler and Sven Klaassen},
+          year={2024},
+          journal={Journal of Statistical Software},
+          volume={108},
+          number={3},
+          pages= {1-56},
+          doi={10.18637/jss.v108.i03},
           note={arXiv:\href{https://arxiv.org/abs/2103.09603}{2103.09603} [stat.ML]}
     }
 
@@ -137,17 +144,18 @@ Foundation) is acknowledged – Project Number 431701914.
 
 ## References
 
--   Bach, P., Chernozhukov, V., Kurz, M. S., and Spindler, M. (2021),
-    DoubleML - An Object-Oriented Implementation of Double Machine
-    Learning in R, arXiv:[2103.09603](https://arxiv.org/abs/2103.09603).
+- Bach, P., Chernozhukov, V., Kurz, M. S., Spindler, M. and Klaassen, S.
+  (2024), DoubleML - An Object-Oriented Implementation of Double Machine
+  Learning in R, Journal of Statistical Software, 108(3): 1-56,
+  <doi:10.18637/jss.v108.i03>,
+  arXiv:[2103.09603](https://arxiv.org/abs/2103.09603).
 
--   Chernozhukov, V., Chetverikov, D., Demirer, M., Duflo, E., Hansen,
-    C., Newey, W. and Robins, J. (2018), Double/debiased machine
-    learning for treatment and structural parameters. The Econometrics
-    Journal, 21: C1-C68, <https://doi.org/10.1111/ectj.12097>.
+- Chernozhukov, V., Chetverikov, D., Demirer, M., Duflo, E., Hansen, C.,
+  Newey, W. and Robins, J. (2018), Double/debiased machine learning for
+  treatment and structural parameters. The Econometrics Journal, 21:
+  C1-C68, <https://doi.org/10.1111/ectj.12097>.
 
--   Lang, M., Binder, M., Richter, J., Schratz, P., Pfisterer, F.,
-    Coors, S., Au, Q., Casalicchio, G., Kotthoff, L., Bischl, B. (2019),
-    mlr3: A modern object-oriented machine learing framework in R.
-    Journal of Open Source Software,
-    <https://doi.org/10.21105/joss.01903>.
+- Lang, M., Binder, M., Richter, J., Schratz, P., Pfisterer, F., Coors,
+  S., Au, Q., Casalicchio, G., Kotthoff, L., Bischl, B. (2019), mlr3: A
+  modern object-oriented machine learing framework in R. Journal of Open
+  Source Software, <https://doi.org/10.21105/joss.01903>.

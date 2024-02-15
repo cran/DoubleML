@@ -742,7 +742,7 @@ DoubleML = R6Class("DoubleML",
     #' in the [mlr3tuning](https://mlr3tuning.mlr-org.com/) package. For more
     #' information on tuning in [mlr3](https://mlr3.mlr-org.com/), we refer to
     #' the section on parameter tuning in the
-    #' [mlr3 book](https://mlr3book.mlr-org.com/optimization.html#tuning).
+    #' [mlr3 book](https://mlr3book.mlr-org.com/chapters/chapter4/hyperparameter_optimization.html).
     #'
     #' @param param_set (named `list()`) \cr
     #' A named `list` with a parameter grid for each nuisance model/learner
@@ -950,7 +950,7 @@ DoubleML = R6Class("DoubleML",
       if (joint == FALSE) {
         a = (1 - level) / 2
         a = c(a, 1 - a)
-        pct = format.perc(a, 3)
+        pct = format_perc(a, 3)
         fac = qnorm(a)
         ci = array(NA_real_,
           dim = c(length(parm), 2L),
@@ -962,7 +962,7 @@ DoubleML = R6Class("DoubleML",
 
         a = (1 - level)
         ab = c(a / 2, 1 - a / 2)
-        pct = format.perc(ab, 3)
+        pct = format_perc(ab, 3)
         ci = array(NA_real_,
           dim = c(length(parm), 2L),
           dimnames = list(parm, pct))

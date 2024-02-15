@@ -363,20 +363,22 @@ simulate data from a partially linear regression model.</p>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Load bonus data</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>df_bonus <span class="ot">=</span> <span class="fu">fetch_bonus</span>(<span class="at">return_type=</span><span class="st">&quot;data.table&quot;</span>)</span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df_bonus)</span></code></pre></div>
-<pre><code>##    inuidur1 female black othrace dep1 dep2 q2 q3 q4 q5 q6 agelt35 agegt54
-## 1: 2.890372      0     0       0    0    1  0  0  0  1  0       0       0
-## 2: 0.000000      0     0       0    0    0  0  0  0  1  0       0       0
-## 3: 3.295837      0     0       0    0    0  0  0  1  0  0       0       0
-## 4: 2.197225      0     0       0    0    0  0  1  0  0  0       1       0
-## 5: 3.295837      0     0       0    1    0  0  0  0  1  0       0       1
-## 6: 3.295837      1     0       0    0    0  0  0  0  1  0       0       1
-##    durable lusd husd tg
-## 1:       0    0    1  0
-## 2:       0    1    0  0
-## 3:       0    1    0  0
-## 4:       0    0    0  1
-## 5:       1    1    0  0
-## 6:       0    1    0  0</code></pre>
+<pre><code>##    inuidur1 female black othrace  dep1  dep2    q2    q3    q4    q5    q6
+##       &lt;num&gt;  &lt;num&gt; &lt;num&gt;   &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;
+## 1: 2.890372      0     0       0     0     1     0     0     0     1     0
+## 2: 0.000000      0     0       0     0     0     0     0     0     1     0
+## 3: 3.295837      0     0       0     0     0     0     0     1     0     0
+## 4: 2.197225      0     0       0     0     0     0     1     0     0     0
+## 5: 3.295837      0     0       0     1     0     0     0     0     1     0
+## 6: 3.295837      1     0       0     0     0     0     0     0     1     0
+##    agelt35 agegt54 durable  lusd  husd    tg
+##      &lt;num&gt;   &lt;num&gt;   &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;
+## 1:       0       0       0     0     1     0
+## 2:       0       0       0     1     0     0
+## 3:       0       0       0     1     0     0
+## 4:       1       0       0     0     0     1
+## 5:       0       1       1     1     0     0
+## 6:       0       1       0     1     0     0</code></pre>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulate data</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">3141</span>)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>n_obs <span class="ot">=</span> <span class="dv">500</span></span>
