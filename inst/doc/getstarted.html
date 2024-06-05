@@ -49,7 +49,7 @@ overflow: visible;
 </style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -347,9 +347,9 @@ functionalities of <code>DoubleML</code>.</p>
 <p>The <strong>DoubleML</strong> package for R can be downloaded using
 (requires previous installation of the <a href="https://remotes.r-lib.org/index.html"><code>remotes</code>
 package</a>).</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;DoubleML/doubleml-for-r&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;DoubleML/doubleml-for-r&quot;</span>)</span></code></pre></div>
 <p>Load the package after completed installation.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DoubleML)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">library</span>(DoubleML)</span></code></pre></div>
 <p>The python package <code>DoubleML</code> is available via the github
 repository. For more information, please visit our user guide.</p>
 </div>
@@ -358,11 +358,11 @@ repository. For more information, please visit our user guide.</p>
 <p>For our case study we download the Bonus data set from the
 Pennsylvania Reemployment Bonus experiment and as a second example we
 simulate data from a partially linear regression model.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DoubleML)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Load bonus data</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>df_bonus <span class="ot">=</span> <span class="fu">fetch_bonus</span>(<span class="at">return_type=</span><span class="st">&quot;data.table&quot;</span>)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df_bonus)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">library</span>(DoubleML)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co"># Load bonus data</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>df_bonus <span class="ot">=</span> <span class="fu">fetch_bonus</span>(<span class="at">return_type=</span><span class="st">&quot;data.table&quot;</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="fu">head</span>(df_bonus)</span></code></pre></div>
 <pre><code>##    inuidur1 female black othrace  dep1  dep2    q2    q3    q4    q5    q6
 ##       &lt;num&gt;  &lt;num&gt; &lt;num&gt;   &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;
 ## 1: 2.890372      0     0       0     0     1     0     0     0     1     0
@@ -379,14 +379,14 @@ simulate data from a partially linear regression model.</p>
 ## 4:       1       0       0     0     0     1
 ## 5:       0       1       1     1     0     0
 ## 6:       0       1       0     1     0     0</code></pre>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulate data</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">3141</span>)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>n_obs <span class="ot">=</span> <span class="dv">500</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>n_vars <span class="ot">=</span> <span class="dv">100</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>theta <span class="ot">=</span> <span class="dv">3</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>X <span class="ot">=</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(n_obs<span class="sc">*</span>n_vars), <span class="at">nrow=</span>n_obs, <span class="at">ncol=</span>n_vars)</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>d <span class="ot">=</span> X[,<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]<span class="sc">%*%</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">5</span>) <span class="sc">+</span> <span class="fu">rnorm</span>(n_obs)</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>y <span class="ot">=</span> theta<span class="sc">*</span>d <span class="sc">+</span> X[, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]<span class="sc">%*%</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">5</span>) <span class="sc">+</span> <span class="fu">rnorm</span>(n_obs)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># Simulate data</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">3141</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>n_obs <span class="ot">=</span> <span class="dv">500</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>n_vars <span class="ot">=</span> <span class="dv">100</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>theta <span class="ot">=</span> <span class="dv">3</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>X <span class="ot">=</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(n_obs<span class="sc">*</span>n_vars), <span class="at">nrow=</span>n_obs, <span class="at">ncol=</span>n_vars)</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>d <span class="ot">=</span> X[,<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]<span class="sc">%*%</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">5</span>) <span class="sc">+</span> <span class="fu">rnorm</span>(n_obs)</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>y <span class="ot">=</span> theta<span class="sc">*</span>d <span class="sc">+</span> X[, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]<span class="sc">%*%</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">5</span>) <span class="sc">+</span> <span class="fu">rnorm</span>(n_obs)</span></code></pre></div>
 </div>
 <div id="the-causal-model" class="section level2">
 <h2>The causal model</h2>
@@ -413,14 +413,14 @@ the column <code>y_col=&quot;inuidur1&quot;</code> serving as outcome variable
 <code>x_cols=c(&quot;female&quot;, &quot;black&quot;, &quot;othrace&quot;, &quot;dep1&quot;, &quot;dep2&quot;, &quot;q2&quot;, &quot;q3&quot;, &quot;q4&quot;, &quot;q5&quot;, &quot;q6&quot;, &quot;agelt35&quot;, &quot;agegt54&quot;, &quot;durable&quot;, &quot;lusd&quot;, &quot;husd&quot;)</code>
 specifying the confounders. Alternatively a matrix interface can be used
 as shown below for the simulated data.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Specify the data and variables for the causal model</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>dml_data_bonus <span class="ot">=</span> DoubleMLData<span class="sc">$</span><span class="fu">new</span>(df_bonus,</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">y_col =</span> <span class="st">&quot;inuidur1&quot;</span>,</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>                             <span class="at">d_cols =</span> <span class="st">&quot;tg&quot;</span>,</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                             <span class="at">x_cols =</span> <span class="fu">c</span>(<span class="st">&quot;female&quot;</span>, <span class="st">&quot;black&quot;</span>, <span class="st">&quot;othrace&quot;</span>, <span class="st">&quot;dep1&quot;</span>, <span class="st">&quot;dep2&quot;</span>,</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>                                        <span class="st">&quot;q2&quot;</span>, <span class="st">&quot;q3&quot;</span>, <span class="st">&quot;q4&quot;</span>, <span class="st">&quot;q5&quot;</span>, <span class="st">&quot;q6&quot;</span>, <span class="st">&quot;agelt35&quot;</span>, <span class="st">&quot;agegt54&quot;</span>,</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>                                          <span class="st">&quot;durable&quot;</span>, <span class="st">&quot;lusd&quot;</span>, <span class="st">&quot;husd&quot;</span>))</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(dml_data_bonus)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># Specify the data and variables for the causal model</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>dml_data_bonus <span class="ot">=</span> DoubleMLData<span class="sc">$</span><span class="fu">new</span>(df_bonus,</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>                             <span class="at">y_col =</span> <span class="st">&quot;inuidur1&quot;</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>                             <span class="at">d_cols =</span> <span class="st">&quot;tg&quot;</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>                             <span class="at">x_cols =</span> <span class="fu">c</span>(<span class="st">&quot;female&quot;</span>, <span class="st">&quot;black&quot;</span>, <span class="st">&quot;othrace&quot;</span>, <span class="st">&quot;dep1&quot;</span>, <span class="st">&quot;dep2&quot;</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>                                        <span class="st">&quot;q2&quot;</span>, <span class="st">&quot;q3&quot;</span>, <span class="st">&quot;q4&quot;</span>, <span class="st">&quot;q5&quot;</span>, <span class="st">&quot;q6&quot;</span>, <span class="st">&quot;agelt35&quot;</span>, <span class="st">&quot;agegt54&quot;</span>,</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>                                          <span class="st">&quot;durable&quot;</span>, <span class="st">&quot;lusd&quot;</span>, <span class="st">&quot;husd&quot;</span>))</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="fu">print</span>(dml_data_bonus)</span></code></pre></div>
 <pre><code>## ================= DoubleMLData Object ==================
 ## 
 ## 
@@ -430,9 +430,9 @@ as shown below for the simulated data.</p>
 ## Covariates: female, black, othrace, dep1, dep2, q2, q3, q4, q5, q6, agelt35, agegt54, durable, lusd, husd
 ## Instrument(s): 
 ## No. Observations: 5099</code></pre>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># matrix interface to DoubleMLData</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>dml_data_sim <span class="ot">=</span> <span class="fu">double_ml_data_from_matrix</span>(<span class="at">X =</span> X, <span class="at">y =</span> y, <span class="at">d =</span> d)</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>dml_data_sim</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># matrix interface to DoubleMLData</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>dml_data_sim <span class="ot">=</span> <span class="fu">double_ml_data_from_matrix</span>(<span class="at">X =</span> X, <span class="at">y =</span> y, <span class="at">d =</span> d)</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>dml_data_sim</span></code></pre></div>
 <pre><code>## ================= DoubleMLData Object ==================
 ## 
 ## 
@@ -453,18 +453,18 @@ partially linear model we use a Lasso regression model. The
 implementation of <code>DoubleML</code> is based on the meta-packages <a href="https://mlr3.mlr-org.com/">mlr3</a> for R. For details on the
 specification of learners and their hyperparameters we refer to the user
 guide Learners, hyperparameters and hyperparameter tuning.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3learners)</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># surpress messages from mlr3 package during fitting</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>lgr<span class="sc">::</span><span class="fu">get_logger</span>(<span class="st">&quot;mlr3&quot;</span>)<span class="sc">$</span><span class="fu">set_threshold</span>(<span class="st">&quot;warn&quot;</span>)</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>learner <span class="ot">=</span> <span class="fu">lrn</span>(<span class="st">&quot;regr.ranger&quot;</span>, <span class="at">num.trees =</span> <span class="dv">500</span>, <span class="at">max.depth =</span> <span class="dv">5</span>, <span class="at">min.node.size =</span> <span class="dv">2</span>)</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>ml_l_bonus <span class="ot">=</span> learner<span class="sc">$</span><span class="fu">clone</span>()</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>ml_m_bonus <span class="ot">=</span> learner<span class="sc">$</span><span class="fu">clone</span>()</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>learner <span class="ot">=</span> <span class="fu">lrn</span>(<span class="st">&quot;regr.glmnet&quot;</span>, <span class="at">lambda =</span> <span class="fu">sqrt</span>(<span class="fu">log</span>(n_vars)<span class="sc">/</span>(n_obs)))</span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>ml_l_sim <span class="ot">=</span> learner<span class="sc">$</span><span class="fu">clone</span>()</span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>ml_m_sim <span class="ot">=</span> learner<span class="sc">$</span><span class="fu">clone</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">library</span>(mlr3)</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="fu">library</span>(mlr3learners)</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="co"># surpress messages from mlr3 package during fitting</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>lgr<span class="sc">::</span><span class="fu">get_logger</span>(<span class="st">&quot;mlr3&quot;</span>)<span class="sc">$</span><span class="fu">set_threshold</span>(<span class="st">&quot;warn&quot;</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>learner <span class="ot">=</span> <span class="fu">lrn</span>(<span class="st">&quot;regr.ranger&quot;</span>, <span class="at">num.trees =</span> <span class="dv">500</span>, <span class="at">max.depth =</span> <span class="dv">5</span>, <span class="at">min.node.size =</span> <span class="dv">2</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>ml_l_bonus <span class="ot">=</span> learner<span class="sc">$</span><span class="fu">clone</span>()</span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>ml_m_bonus <span class="ot">=</span> learner<span class="sc">$</span><span class="fu">clone</span>()</span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a>learner <span class="ot">=</span> <span class="fu">lrn</span>(<span class="st">&quot;regr.glmnet&quot;</span>, <span class="at">lambda =</span> <span class="fu">sqrt</span>(<span class="fu">log</span>(n_vars)<span class="sc">/</span>(n_obs)))</span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a>ml_l_sim <span class="ot">=</span> learner<span class="sc">$</span><span class="fu">clone</span>()</span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a>ml_m_sim <span class="ot">=</span> learner<span class="sc">$</span><span class="fu">clone</span>()</span></code></pre></div>
 </div>
 <div id="cross-fitting-dml-algorithms-and-neyman-orthogonal-score-functions" class="section level2">
 <h2>Cross-fitting, DML algorithms and Neyman-orthogonal score
@@ -503,10 +503,10 @@ model classes also provide functionalities to perform statistical
 inference like <code>bootstrap()</code>, <code>confint()</code> and
 <code>p_adjust()</code>, for details see the user guide Variance
 estimation, confidence intervals and boostrap standard errors.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">3141</span>)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>obj_dml_plr_bonus <span class="ot">=</span> DoubleMLPLR<span class="sc">$</span><span class="fu">new</span>(dml_data_bonus, <span class="at">ml_l =</span> ml_l_bonus, <span class="at">ml_m =</span> ml_m_bonus)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>obj_dml_plr_bonus<span class="sc">$</span><span class="fu">fit</span>()</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(obj_dml_plr_bonus)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">3141</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>obj_dml_plr_bonus <span class="ot">=</span> DoubleMLPLR<span class="sc">$</span><span class="fu">new</span>(dml_data_bonus, <span class="at">ml_l =</span> ml_l_bonus, <span class="at">ml_m =</span> ml_m_bonus)</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>obj_dml_plr_bonus<span class="sc">$</span><span class="fu">fit</span>()</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="fu">print</span>(obj_dml_plr_bonus)</span></code></pre></div>
 <pre><code>## ================= DoubleMLPLR Object ==================
 ## 
 ## 
@@ -536,9 +536,9 @@ estimation, confidence intervals and boostrap standard errors.</p>
 ## tg  -0.07561    0.03536  -2.139   0.0325 *
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>obj_dml_plr_sim <span class="ot">=</span> DoubleMLPLR<span class="sc">$</span><span class="fu">new</span>(dml_data_sim, <span class="at">ml_l =</span> ml_l_sim, <span class="at">ml_m =</span> ml_m_sim)</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>obj_dml_plr_sim<span class="sc">$</span><span class="fu">fit</span>()</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(obj_dml_plr_sim)</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>obj_dml_plr_sim <span class="ot">=</span> DoubleMLPLR<span class="sc">$</span><span class="fu">new</span>(dml_data_sim, <span class="at">ml_l =</span> ml_l_sim, <span class="at">ml_m =</span> ml_m_sim)</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>obj_dml_plr_sim<span class="sc">$</span><span class="fu">fit</span>()</span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="fu">print</span>(obj_dml_plr_sim)</span></code></pre></div>
 <pre><code>## ================= DoubleMLPLR Object ==================
 ## 
 ## 
