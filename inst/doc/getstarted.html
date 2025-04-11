@@ -361,7 +361,7 @@ simulate data from a partially linear regression model.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">library</span>(DoubleML)</span>
 <span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co"># Load bonus data</span></span>
-<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>df_bonus <span class="ot">=</span> <span class="fu">fetch_bonus</span>(<span class="at">return_type=</span><span class="st">&quot;data.table&quot;</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>df_bonus <span class="ot">=</span> <span class="fu">fetch_bonus</span>(<span class="at">return_type =</span> <span class="st">&quot;data.table&quot;</span>)</span>
 <span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="fu">head</span>(df_bonus)</span></code></pre></div>
 <pre><code>##    inuidur1 female black othrace  dep1  dep2    q2    q3    q4    q5    q6
 ##       &lt;num&gt;  &lt;num&gt; &lt;num&gt;   &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;
@@ -384,9 +384,9 @@ simulate data from a partially linear regression model.</p>
 <span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>n_obs <span class="ot">=</span> <span class="dv">500</span></span>
 <span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>n_vars <span class="ot">=</span> <span class="dv">100</span></span>
 <span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>theta <span class="ot">=</span> <span class="dv">3</span></span>
-<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>X <span class="ot">=</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(n_obs<span class="sc">*</span>n_vars), <span class="at">nrow=</span>n_obs, <span class="at">ncol=</span>n_vars)</span>
-<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>d <span class="ot">=</span> X[,<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]<span class="sc">%*%</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">5</span>) <span class="sc">+</span> <span class="fu">rnorm</span>(n_obs)</span>
-<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>y <span class="ot">=</span> theta<span class="sc">*</span>d <span class="sc">+</span> X[, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]<span class="sc">%*%</span><span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">5</span>) <span class="sc">+</span> <span class="fu">rnorm</span>(n_obs)</span></code></pre></div>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>X <span class="ot">=</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(n_obs <span class="sc">*</span> n_vars), <span class="at">nrow =</span> n_obs, <span class="at">ncol =</span> n_vars)</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>d <span class="ot">=</span> X[, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>] <span class="sc">%*%</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>) <span class="sc">+</span> <span class="fu">rnorm</span>(n_obs)</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>y <span class="ot">=</span> theta <span class="sc">*</span> d <span class="sc">+</span> X[, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>] <span class="sc">%*%</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>) <span class="sc">+</span> <span class="fu">rnorm</span>(n_obs)</span></code></pre></div>
 </div>
 <div id="the-causal-model" class="section level2">
 <h2>The causal model</h2>
@@ -415,11 +415,11 @@ specifying the confounders. Alternatively a matrix interface can be used
 as shown below for the simulated data.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># Specify the data and variables for the causal model</span></span>
 <span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>dml_data_bonus <span class="ot">=</span> DoubleMLData<span class="sc">$</span><span class="fu">new</span>(df_bonus,</span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>                             <span class="at">y_col =</span> <span class="st">&quot;inuidur1&quot;</span>,</span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>                             <span class="at">d_cols =</span> <span class="st">&quot;tg&quot;</span>,</span>
-<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>                             <span class="at">x_cols =</span> <span class="fu">c</span>(<span class="st">&quot;female&quot;</span>, <span class="st">&quot;black&quot;</span>, <span class="st">&quot;othrace&quot;</span>, <span class="st">&quot;dep1&quot;</span>, <span class="st">&quot;dep2&quot;</span>,</span>
-<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>                                        <span class="st">&quot;q2&quot;</span>, <span class="st">&quot;q3&quot;</span>, <span class="st">&quot;q4&quot;</span>, <span class="st">&quot;q5&quot;</span>, <span class="st">&quot;q6&quot;</span>, <span class="st">&quot;agelt35&quot;</span>, <span class="st">&quot;agegt54&quot;</span>,</span>
-<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>                                          <span class="st">&quot;durable&quot;</span>, <span class="st">&quot;lusd&quot;</span>, <span class="st">&quot;husd&quot;</span>))</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="at">y_col =</span> <span class="st">&quot;inuidur1&quot;</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  <span class="at">d_cols =</span> <span class="st">&quot;tg&quot;</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>  <span class="at">x_cols =</span> <span class="fu">c</span>(<span class="st">&quot;female&quot;</span>, <span class="st">&quot;black&quot;</span>, <span class="st">&quot;othrace&quot;</span>, <span class="st">&quot;dep1&quot;</span>, <span class="st">&quot;dep2&quot;</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>    <span class="st">&quot;q2&quot;</span>, <span class="st">&quot;q3&quot;</span>, <span class="st">&quot;q4&quot;</span>, <span class="st">&quot;q5&quot;</span>, <span class="st">&quot;q6&quot;</span>, <span class="st">&quot;agelt35&quot;</span>, <span class="st">&quot;agegt54&quot;</span>,</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>    <span class="st">&quot;durable&quot;</span>, <span class="st">&quot;lusd&quot;</span>, <span class="st">&quot;husd&quot;</span>))</span>
 <span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="fu">print</span>(dml_data_bonus)</span></code></pre></div>
 <pre><code>## ================= DoubleMLData Object ==================
 ## 
@@ -429,6 +429,7 @@ as shown below for the simulated data.</p>
 ## Treatment variable(s): tg
 ## Covariates: female, black, othrace, dep1, dep2, q2, q3, q4, q5, q6, agelt35, agegt54, durable, lusd, husd
 ## Instrument(s): 
+## Selection variable: 
 ## No. Observations: 5099</code></pre>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># matrix interface to DoubleMLData</span></span>
 <span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>dml_data_sim <span class="ot">=</span> <span class="fu">double_ml_data_from_matrix</span>(<span class="at">X =</span> X, <span class="at">y =</span> y, <span class="at">d =</span> d)</span>
@@ -441,6 +442,7 @@ as shown below for the simulated data.</p>
 ## Treatment variable(s): d
 ## Covariates: X1, X2, X3, X4, X5, X6, X7, X8, X9, X10, X11, X12, X13, X14, X15, X16, X17, X18, X19, X20, X21, X22, X23, X24, X25, X26, X27, X28, X29, X30, X31, X32, X33, X34, X35, X36, X37, X38, X39, X40, X41, X42, X43, X44, X45, X46, X47, X48, X49, X50, X51, X52, X53, X54, X55, X56, X57, X58, X59, X60, X61, X62, X63, X64, X65, X66, X67, X68, X69, X70, X71, X72, X73, X74, X75, X76, X77, X78, X79, X80, X81, X82, X83, X84, X85, X86, X87, X88, X89, X90, X91, X92, X93, X94, X95, X96, X97, X98, X99, X100
 ## Instrument(s): 
+## Selection variable: 
 ## No. Observations: 500</code></pre>
 </div>
 <div id="learners-to-estimate-the-nuisance-models" class="section level2">
@@ -462,7 +464,7 @@ guide Learners, hyperparameters and hyperparameter tuning.</p>
 <span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>ml_l_bonus <span class="ot">=</span> learner<span class="sc">$</span><span class="fu">clone</span>()</span>
 <span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>ml_m_bonus <span class="ot">=</span> learner<span class="sc">$</span><span class="fu">clone</span>()</span>
 <span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a></span>
-<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a>learner <span class="ot">=</span> <span class="fu">lrn</span>(<span class="st">&quot;regr.glmnet&quot;</span>, <span class="at">lambda =</span> <span class="fu">sqrt</span>(<span class="fu">log</span>(n_vars)<span class="sc">/</span>(n_obs)))</span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a>learner <span class="ot">=</span> <span class="fu">lrn</span>(<span class="st">&quot;regr.glmnet&quot;</span>, <span class="at">lambda =</span> <span class="fu">sqrt</span>(<span class="fu">log</span>(n_vars) <span class="sc">/</span> (n_obs)))</span>
 <span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a>ml_l_sim <span class="ot">=</span> learner<span class="sc">$</span><span class="fu">clone</span>()</span>
 <span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a>ml_m_sim <span class="ot">=</span> learner<span class="sc">$</span><span class="fu">clone</span>()</span></code></pre></div>
 </div>
@@ -515,6 +517,7 @@ estimation, confidence intervals and boostrap standard errors.</p>
 ## Treatment variable(s): tg
 ## Covariates: female, black, othrace, dep1, dep2, q2, q3, q4, q5, q6, agelt35, agegt54, durable, lusd, husd
 ## Instrument(s): 
+## Selection variable: 
 ## No. Observations: 5099
 ## 
 ## ------------------ Score &amp; algorithm ------------------
@@ -547,6 +550,7 @@ estimation, confidence intervals and boostrap standard errors.</p>
 ## Treatment variable(s): d
 ## Covariates: X1, X2, X3, X4, X5, X6, X7, X8, X9, X10, X11, X12, X13, X14, X15, X16, X17, X18, X19, X20, X21, X22, X23, X24, X25, X26, X27, X28, X29, X30, X31, X32, X33, X34, X35, X36, X37, X38, X39, X40, X41, X42, X43, X44, X45, X46, X47, X48, X49, X50, X51, X52, X53, X54, X55, X56, X57, X58, X59, X60, X61, X62, X63, X64, X65, X66, X67, X68, X69, X70, X71, X72, X73, X74, X75, X76, X77, X78, X79, X80, X81, X82, X83, X84, X85, X86, X87, X88, X89, X90, X91, X92, X93, X94, X95, X96, X97, X98, X99, X100
 ## Instrument(s): 
+## Selection variable: 
 ## No. Observations: 500
 ## 
 ## ------------------ Score &amp; algorithm ------------------

@@ -3,14 +3,14 @@ knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_chunk$set(eval = FALSE)
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  install.packages("DoubleML")
+# install.packages("DoubleML")
 
 ## ----message=FALSE, warning=FALSE---------------------------------------------
-#  library(DoubleML)
+# library(DoubleML)
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  remotes::install_github("DoubleML/doubleml-for-r")
+# remotes::install_github("DoubleML/doubleml-for-r")
 
 ## ----message=FALSE, warning=FALSE---------------------------------------------
-#  library(DoubleML)
+# library(DoubleML)
 
